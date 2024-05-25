@@ -6,12 +6,13 @@ const scrapeEs = async (req,res = response) => {
     
 
     try {
-        const articles = await fetchRSS(mediaES, 5);
-        // console.log(articles)
+        const articles = await fetchRSS(mediaES, 10);
+        console.log(articles)
         res.status(200).json({
             ok: true,
             msg: 'Scraping news from Spanish media',
-            // data: articles
+            count:articles.length,
+            data: articles
    }) 
     } catch (error) {
         console.error('Error en scrapeEs:', error);

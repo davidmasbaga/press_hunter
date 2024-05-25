@@ -1,12 +1,10 @@
 
-// import { fetchRSS } from './news/news-parser.js';
-
-// import mediaES from './data/mediaES.js';
-
+// const { fetchRSS } = require('./news/news-parser.js');  
+// const mediaES = require('./data/mediaES.js');
 
 // (async () => {
-//     await fetchRSS(mediaES,15);
-//   })();
+//     await fetchRSS(mediaES);
+// })();
 
 
 const Server = require('./models/server')
