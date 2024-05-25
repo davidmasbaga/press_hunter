@@ -1,11 +1,10 @@
-import Parser from 'rss-parser';
+const Parser = require('rss-parser');
+const cheerio = require('cheerio');
+const axios = require('axios');
+const TurndownService = require('turndown');
+const mediaES = require('../data/mediaES.js');
+
 const parser = new Parser();
-import cheerio from 'cheerio'
-import axios from 'axios'
-import TurndownService from 'turndown'
-
-
-
 const turndownService = new TurndownService();
 
 turndownService.addRule('removeAttributes', {
@@ -21,12 +20,12 @@ turndownService.addRule('removeAttributes', {
 
 
 
-export async function fetchRSS(mediaArray) {
+async function fetchRSS(mediaArray,newsPerMedia) {
   try {
     for (const media of mediaArray) {
       const feed = await parser.parseURL(media.linkRRSS);
 
-      const articles = await Promise.all(feed.items.slice(0, 3).map(async (item) => {
+      const articles = await Promise.all(feed.items.slice(0, newsPerMedia).map(async (item) => {
         let mediaName = 'Sample';
         let mainCategory = 'noticias';
         let content = '';
@@ -43,6 +42,8 @@ export async function fetchRSS(mediaArray) {
             .filter((cat) => cat.length > 0)
           : [];
 
+
+
         // * DIARIO.ES HECHO
         if (media.media === 'esdiario') {
           mediaName = 'Diario.Es';
@@ -55,13 +56,13 @@ export async function fetchRSS(mediaArray) {
             const response = await axios.get(link);
             const html = response.data;
             const $ = cheerio.load(html);
-            const cardContent = $('.card-content');
-            // Eliminar <blockquote> y <figure>
-            cardContent.find('blockquote, figure').remove();
+            const cardContent = $(mediaES[0].bodyClass); 
+          
+       
 
+            cardContent.find('blockquote, figure').remove();
             cardContent.find('*').each((i, el) => {
               const element = $(el);
-
               element.removeAttr('class').removeAttr('id').removeAttr('href');
             });
 
@@ -91,13 +92,15 @@ export async function fetchRSS(mediaArray) {
             const html = response.data;
             const $ = cheerio.load(html);
 
-            const paywall = $("#ctn_freemium_article");
+            const paywall = $(mediaES[1].paywallClass);
 
+           
             if (paywall.length > 0) {
               freeArticle = false;
             } else {
               freeArticle = true;
-              const cardContent = $('[data-dtm-region="articulo_cuerpo"]')
+              console.log('hola')
+              const cardContent = $(mediaES[1].bodyClass)
               // Eliminar <blockquote> y <figure>
               cardContent.find('blockquote, figure').remove();
 
@@ -136,13 +139,13 @@ export async function fetchRSS(mediaArray) {
             const html = response.data;
             const $ = cheerio.load(html);
 
-            const paywall = $("#pn-template");
+            const paywall = $(mediaES[2].paywallClass);
 
             if (paywall.length > 0) {
               freeArticle = false;
             } else {
               freeArticle = true;
-              const cardContent = $('.ft-layout-grid-flex__colXs-12.ft-layout-grid-flex__colSm-11');
+              const cardContent = $(mediaES[2].bodyClass);
 
 
 
@@ -185,13 +188,13 @@ export async function fetchRSS(mediaArray) {
             const html = response.data;
             const $ = cheerio.load(html);
 
-            const paywall = $(".ue-c-article__premium-title");
+            const paywall = $(mediaES[3].paywallClass);
 
             if (paywall.length > 0) {
               freeArticle = false;
             } else {
               freeArticle = true;
-              const cardContent = $('.ue-c-article__body');
+              const cardContent = $(mediaES[3].bodyClass);
 
 
 
@@ -241,9 +244,11 @@ export async function fetchRSS(mediaArray) {
       // Filtrar solo los artículos gratuitos
       const freeArticles = articles.filter(article => article.freeArticle);
 
-      // Imprimir los artículos gratuitos
-      freeArticles.forEach(article => console.log(article));
 
+      // return freeArticles;
+      // Imprimir los artículos gratuitos
+      // freeArticles.forEach(article => console.log(article));
+      // return articles;
       // console.log(articles)
     }
   } catch (error) {
@@ -254,3 +259,4 @@ export async function fetchRSS(mediaArray) {
 
 
 
+module.exports = { fetchRSS };
