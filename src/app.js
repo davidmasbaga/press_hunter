@@ -9,6 +9,8 @@
 
 const Server = require('./models/server')
 
+// const openAiChat = require('./services/chatgpt.service')
+
 require('dotenv').config()
 
 const server = new Server()

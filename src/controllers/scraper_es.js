@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { fetchRSS } = require('../news/news-parser.js');
+const { fetchRSS } = require('../services/news-parser.service.js');
 const mediaES = require('../data/mediaES');
 const RawArticles = require('../models/raw-article');
 

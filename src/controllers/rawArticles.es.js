@@ -1,12 +1,14 @@
 const RawArticle = require('../models/raw-article.js');
 
+
+
 const getAllArticles = async (req, res) => {
     const { sortByDate, limit } = req.query;
 
 
     try {
 
-        let query = RawArticle.find({ deleted: false });
+        let query = RawArticle.find({ deleted: false }).select('mainCategory');
         if (sortByDate === 'true') {
             query = query.sort({ date: -1 }); 
         }
@@ -24,6 +26,27 @@ const getAllArticles = async (req, res) => {
         res.status(500).json({ message: 'Error retrieving articles', error });
     }
 };
+
+
+const getDataToEvaluate = async (req, res) => {
+    try {
+        const hoursAgo = (hours) => {
+            return new Date(Date.now() - hours * 60 * 60 * 1000);
+        }
+
+        const data = await RawArticle.find(
+            { date: { $gte: hoursAgo(8) }, createdAt: { $gte: hoursAgo(10) } }
+        ).select('title date url mainCategory createdAt');
+        
+        res.status(200).json({ total: data.length, data });
+        return data
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: 'Error al obtener los datos' });
+    }
+}
+
+
 
 const getArticleById = async (req, res) => {
     try {
@@ -96,9 +119,32 @@ const hardDeleteAll = async (req,res)=>{
     }
 }
 
+
+
+const getDataToEvaluateNotHttp = async () => {
+    try {
+        const hoursAgo = (hours) => {
+            return new Date(Date.now() - hours * 60 * 60 * 1000);
+        }
+
+        const data = await RawArticle.find(
+            { date: { $gte: hoursAgo(8) }, createdAt: { $gte: hoursAgo(10) } }
+        ).select('title date url mainCategory createdAt');
+        
+        
+        return data
+    } catch (err) {
+        console.log(err);
+        
+    }
+}
+
+
 module.exports = {
     getAllArticles,
     getArticleById,
+    getDataToEvaluate,
+    getDataToEvaluateNotHttp,
     updateArticle,
     softDeleteArticle,
     hardDeleteArticle,
