@@ -3,6 +3,8 @@ const cheerio = require("cheerio");
 const axios = require("axios");
 const TurndownService = require("turndown");
 const mediaES = require("../data/mediaES.js");
+const { v4: uuidv4 } = require('uuid');
+
 const loadPLimit = async () => {
   const module = await import("p-limit");
   return module.default;
@@ -207,7 +209,8 @@ async function fetchRSS(mediaArray, newsPerMedia) {
             }
 
             return {
-              mediaName,
+              id: uuidv4(),
+              media:mediaName,
               date,
               title,
               link,
