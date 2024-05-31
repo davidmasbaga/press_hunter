@@ -209,8 +209,7 @@ async function fetchRSS(mediaArray, newsPerMedia) {
             }
 
             return {
-              id: uuidv4(),
-              media:mediaName,
+             media:mediaName,
               date,
               title,
               link,

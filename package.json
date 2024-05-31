@@ -24,6 +24,7 @@
     "express": "^4.19.2",
     "get-age": "^1.0.1",
     "moment-timezone": "^0.5.45",
+    "mongoose": "^8.4.0",
     "p-limit": "^5.0.0",
     "rss-parser": "^3.13.0",
     "turndown": "^7.1.3",
