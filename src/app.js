@@ -1,25 +1,16 @@
 
-import { fetchRSS } from './news/news-parser.js';
-import { envs } from './plugins/envs.plugins.js';
+// const { fetchRSS } = require('./news/news-parser.js');  
+// const mediaES = require('./data/mediaES.js');
+
+// (async () => {
+//     await fetchRSS(mediaES);
+// })();
 
 
+const Server = require('./models/server')
 
+require('dotenv').config()
 
+const server = new Server()
 
-const media = [
-    {media:'esdiario', linkRRSS:envs.DIARIO_ES},
-    {media:'elpais', linkRRSS:envs.EL_PAIS},
-    {media:'elperiodico', linkRRSS:envs.PERIODICO},
-    {media:'elmundo', linkRRSS:envs.EL_MUNDO},
-    
-    
-   
-];
-
-
-
-
-(async () => {
-    await fetchRSS(media);
-  })();
-
+server.listen()
