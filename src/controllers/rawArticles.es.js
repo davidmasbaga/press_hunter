@@ -8,7 +8,7 @@ const getAllArticles = async (req, res) => {
 
     try {
 
-        let query = RawArticle.find({ deleted: false }).select('mainCategory');
+        let query = RawArticle.find({ deleted: false })
         if (sortByDate === 'true') {
             query = query.sort({ date: -1 }); 
         }

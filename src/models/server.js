@@ -17,7 +17,8 @@ constructor(){
 
         scrapeEs: '/api/scrape',
         rawArticlesEs: '/api/raw-articles-es',
-        openAi:'/api/openai'
+        openAi:'/api/openai',
+        cleanArticlesEs: 'api/clean-articles-es'
     }
     this.middlewares();
     
@@ -35,7 +36,8 @@ middlewares(){
 routes() {
     this.app.use(this.paths.scrapeEs, require('../routes/scrape_es.js'));
     this.app.use(this.paths.rawArticlesEs, require('../routes/raw-articles-es.js')),
-    this.app.use(this.paths.openAi, require('../routes/open-ai.js'))
+    this.app.use(this.paths.openAi, require('../routes/open-ai.js')),
+    this.app.use(this.paths.cleanArticlesEs, require('../routes/clean-articles-es.js'))
    
    
 
