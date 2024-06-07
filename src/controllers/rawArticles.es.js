@@ -121,30 +121,13 @@ const hardDeleteAll = async (req,res)=>{
 
 
 
-const getDataToEvaluateNotHttp = async () => {
-    try {
-        const hoursAgo = (hours) => {
-            return new Date(Date.now() - hours * 60 * 60 * 1000);
-        }
 
-        const data = await RawArticle.find(
-            { date: { $gte: hoursAgo(8) }, createdAt: { $gte: hoursAgo(10) } }
-        ).select('title date url mainCategory createdAt');
-        
-        
-        return data
-    } catch (err) {
-        console.log(err);
-        
-    }
-}
 
 
 module.exports = {
     getAllArticles,
     getArticleById,
     getDataToEvaluate,
-    getDataToEvaluateNotHttp,
     updateArticle,
     softDeleteArticle,
     hardDeleteArticle,
