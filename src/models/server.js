@@ -18,7 +18,7 @@ constructor(){
         scrapeEs: '/api/scrape',
         rawArticlesEs: '/api/raw-articles-es',
         openAi:'/api/openai',
-        cleanArticlesEs: 'api/clean-articles-es'
+        cleanArticlesEs: '/api/clean-articles-es'
     }
     this.middlewares();
     

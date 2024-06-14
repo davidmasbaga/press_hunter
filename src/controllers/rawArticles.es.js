@@ -1,4 +1,5 @@
 const RawArticle = require('../models/raw-article.js');
+const CleanArticle = require('../models/clean-article.js');
 
 
 
@@ -115,11 +116,30 @@ const hardDeleteAll = async (req,res)=>{
         res.status(200).json({ message: 'Articles hard deleted', result });
 
     }catch(err){
-        res.status(500).json({ message: 'Error bulk deleting articles', error });
+        res.status(500).json({ message: 'Error bulk deleting articles', err });
     }
 }
 
+const deleteIfAreWrote = async (req, res) => {
+    const {password}= req.headers
+   
+    if(password !== process.env.BULK_DELETE_PASSWORD){
+        return res.status(401).json({message:'Unauthorized'})
+    }
 
+    try {
+        let articlesIds = []
+        const articlesWrote = await CleanArticle.find()
+        articlesWrote.forEach(article=>{articlesIds.push(article.idOrigin)})
+        const result = await RawArticle.deleteMany({_id:{$in:articlesIds}})
+        res.status(200).json({ message: 'Articles hard deleted', result });
+        
+    } catch (err) {
+        res.status(500).json({ message: 'Error bulk deleting articles', err });
+    }
+
+   
+};
 
 
 
@@ -131,5 +151,5 @@ module.exports = {
     updateArticle,
     softDeleteArticle,
     hardDeleteArticle,
-    hardDeleteAll
-};
+    hardDeleteAll,
+    deleteIfAreWrote};

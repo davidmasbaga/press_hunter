@@ -28,6 +28,11 @@ const cleanArticlesSchema = new Schema(
       required: true,
     },
     
+    intro: {
+      type: String,
+      required: true,
+    },
+    
     date: {
       type: Date,
       required: true,
@@ -43,7 +48,16 @@ const cleanArticlesSchema = new Schema(
       required: false,
       default: false,
     },
+    autor:{
+      type: String,
+      required: false,
+    },
 
+    image: {
+      type: String,
+      required: false,
+    },
+    
     path: {
       type: String,
       required: true,
